@@ -59,6 +59,15 @@ library's contract demands one.
 Arrow functions are not hoisted, so a component must be declared before
 anything references it. See **Route files**.
 
+When the body is a single expression, drop the block and the `return` and keep
+it on one line. Prettier wraps it if it passes 80 columns.
+
+```tsx
+const Home = () => null
+const double = (n: number) => n * 2
+const Badge = () => <span className="badge" />
+```
+
 ## Route files
 
 Keep route files thin: define the component in the same file, unexported, then
@@ -66,9 +75,7 @@ export the route below it. The component comes first because a `const` is not
 hoisted — referencing it above its declaration throws at module evaluation.
 
 ```tsx
-const Home = () => {
-  return <div className="p-8">…</div>
-}
+const Home = () => <div className="p-8">…</div>
 
 export const Route = createFileRoute('/')({ component: Home })
 ```
