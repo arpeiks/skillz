@@ -1,0 +1,11 @@
+{
+  "name": "conventions",
+  "description": "Engineering conventions to follow when writing code and making commits.",
+  "version": "0.1.0",
+  "author": {
+    "name": "arpeiks",
+    "url": "https://github.com/arpeiks"
+  },
+  "repository": "https://github.com/arpeiks/skillz",
+  "keywords": ["conventions", "code-style", "frontend", "git"]
+}
