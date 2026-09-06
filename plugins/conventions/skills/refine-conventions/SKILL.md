@@ -43,10 +43,15 @@ member updates the marketplace.
 6. **Write in the file's existing voice** — imperative, concrete, short code
    example where it clarifies. The file must stay short enough to be read.
 
-7. **Bump the `version` in both** `.claude-plugin/marketplace.json` and
+7. **If the rule belongs in the "Always apply" set**, mirror it into
+   `AGENTS.md` at the repo root — that is what non-Claude agents (Codex,
+   Copilot, Cursor) read, and it carries the essentials inline. Update its
+   `Version:` and `Updated:` line.
+
+8. **Bump the `version` in both** `.claude-plugin/marketplace.json` and
    `plugins/conventions/.claude-plugin/plugin.json` so teammates see an update.
 
-8. **Follow `general-conventions` when committing** — stage nothing wholesale,
+9. **Follow `general-conventions` when committing** — stage nothing wholesale,
    keep the message short, no co-author trailer.
 
 ## Removing conventions
