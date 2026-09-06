@@ -46,14 +46,19 @@ Always use lowercase kebab-case.
 
 ## Component naming
 
-Components are PascalCase and prefixed with their container, so the symbol
-reads unambiguously at the import site: a component in `container/router/` is
-`RouterShell`, `RouterComponent`, `RouterNotFound`.
+Components are PascalCase, named for what they are and nothing more. A
+component in `container/landing/about.tsx` is `About`, not `LandingAbout` —
+the folder already carries the feature, so repeating it in every symbol is
+noise.
+
+Prefix only where the distinction is required: the bare name collides with
+another import in the same file, or it is too generic to carry meaning on its
+own — `RouterComponent`, not `Component`.
 
 ## Exports
 
-Prefer const arrow functions — `export const RouterShell = () => {}`, not
-`export function RouterShell() {}`. Use a default export only where a
+Prefer const arrow functions — `export const About = () => {}`, not
+`export function About() {}`. Use a default export only where a
 library's contract demands one.
 
 Arrow functions are not hoisted, so a component must be declared before

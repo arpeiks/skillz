@@ -9,7 +9,7 @@
       "name": "conventions",
       "source": "./plugins/conventions",
       "description": "Engineering conventions: commit discipline, frontend stack and structure, formatting and import ordering.",
-      "version": "0.4.0"
+      "version": "0.5.0"
     }
   ]
 }
