@@ -52,21 +52,25 @@ reads unambiguously at the import site: a component in `container/router/` is
 
 ## Exports
 
-Prefer named function declarations — `export function RouterShell() {}`, not
-`export const RouterShell = () => {}`. Use a default export only where a
+Prefer const arrow functions — `export const RouterShell = () => {}`, not
+`export function RouterShell() {}`. Use a default export only where a
 library's contract demands one.
+
+Arrow functions are not hoisted, so a component must be declared before
+anything references it. See **Route files**.
 
 ## Route files
 
-Keep route files thin: export the route, define the component below it in the
-same file, unexported.
+Keep route files thin: define the component in the same file, unexported, then
+export the route below it. The component comes first because a `const` is not
+hoisted — referencing it above its declaration throws at module evaluation.
 
 ```tsx
-export const Route = createFileRoute('/')({ component: Home })
-
-function Home() {
+const Home = () => {
   return <div className="p-8">…</div>
 }
+
+export const Route = createFileRoute('/')({ component: Home })
 ```
 
 ## Internal imports
