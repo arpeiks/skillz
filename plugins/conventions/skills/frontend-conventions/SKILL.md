@@ -116,7 +116,13 @@ own name at `#/components/ui/<name>.tsx`.
 ```
 src/
 ├── components/
+├── routes/
+│   └── index.tsx          # the route — imports Home, exports Route
 └── container/
+    ├── home/
+    │   ├── index.tsx      # the page — exports Home
+    │   ├── hero.tsx
+    │   └── features.tsx
     └── router/
         ├── shell.tsx
         ├── component.tsx
@@ -128,8 +134,9 @@ src/
 - `not-found.tsx` — 404, redirects to the root route.
 
 `components/` is for shared, feature-agnostic UI. `container/<feature>/` is
-feature UI split into small files. Third-party wiring (providers, devtools)
-goes in `integrations/<library>/`.
+feature UI split into small files, with `index.tsx` composing them into the
+page its route imports — see **Route files**. Third-party wiring (providers,
+devtools) goes in `integrations/<library>/`.
 
 ## File naming
 
@@ -163,8 +170,10 @@ Prefer const arrow functions — `export const About = () => {}`, not
 `export function About() {}`. Use a default export only where a
 library's contract demands one.
 
-Arrow functions are not hoisted, so a component must be declared before
-anything references it. See **Route files**.
+Arrow functions are not hoisted, so within a file a component must be declared
+above anything that references it — referencing it earlier throws at module
+evaluation. Compose top-down: the smallest pieces first, the component that
+uses them last.
 
 When the body is a single expression, drop the block and the `return` and keep
 it on one line. Prettier wraps it if it passes 80 columns.
@@ -177,15 +186,38 @@ const Badge = () => <span className="badge" />
 
 ## Route files
 
-Keep route files thin: define the component in the same file, unexported, then
-export the route below it. The component comes first because a `const` is not
-hoisted — referencing it above its declaration throws at module evaluation.
+A route file maps a URL to a page and nothing else. It holds no
+implementation — import the page, export the route:
 
 ```tsx
-const Home = () => <div className="p-8">…</div>
+import { Home } from '#/container/home'
+import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/')({ component: Home })
 ```
+
+The page lives at `container/<feature>/index.tsx`, which composes the feature's
+parts into the component the route imports:
+
+```tsx
+import { Hero } from '#/container/home/hero'
+import { Features } from '#/container/home/features'
+
+export const Home = () => (
+  <div className="p-8">
+    <Hero />
+    <Features />
+  </div>
+)
+```
+
+`index.tsx` is the one file named for its folder rather than for itself:
+`container/home/index.tsx` exports `Home`. Everything it composes sits beside
+it in that folder, one piece per file.
+
+This keeps the routing tree readable on its own — every route file is two
+lines — and lets a page be moved to another URL, or rendered outside a route
+entirely, without unpicking it from route config.
 
 ## Internal imports
 
