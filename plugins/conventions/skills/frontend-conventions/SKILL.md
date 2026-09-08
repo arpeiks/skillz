@@ -2,10 +2,11 @@
 name: frontend-conventions
 description: >-
   Frontend conventions for JavaScript and TypeScript projects: default stack
-  when initializing a project, which UI component library to reach for,
-  folder structure, file naming, import ordering
-  (pyramid sort), formatting toolchain, component naming, exports, and
-  internal import aliases. Read before writing or scaffolding frontend code.
+  when initializing a project, which UI component library to reach for, folder
+  structure, naming of files, components and functions, exports, internal
+  import aliases, import ordering (pyramid sort), the formatting toolchain, and
+  how generated code is kept out of it and extended instead. Read before
+  writing or scaffolding frontend code.
 ---
 
 # Frontend conventions
@@ -54,6 +55,62 @@ Tailwind 4 token and `data-slot` conventions, and the shadcn/Radix → coss
 migration rules (`asChild` → `render`, `onSelect` → `onClick`, Select
 items-first, ToggleGroup `type` → `multiple`, Slider scalar values).
 
+## Generated code is never edited and never formatted
+
+Anything a registry CLI writes — `shadcn add` output, `routeTree.gen.ts` — is
+not project source. Leave it byte-for-byte as generated:
+
+- Never hand-edit it.
+- Never format it.
+
+The next `add` overwrites the file, so an edit or a reformat is churn that is
+silently lost, and it turns every routine update into a spurious diff.
+
+Excluding it takes **two** mechanisms, because the toolchain is asymmetric.
+Prettier reads `.prettierignore`. pyramid-sort has no ignore mechanism at all
+— it takes a single path and honours only `.gitignore`, and generated code is
+tracked — so it must be handed authored files explicitly:
+
+```sh
+# scripts/format.sh — "format": "sh scripts/format.sh"
+authored() {
+  find src -path 'src/components/ui' -prune -o \
+    -type f \( -name '*.ts' -o -name '*.tsx' -o -name '*.css' \) -print
+}
+
+prettier --write . --log-level warn
+authored | while IFS= read -r f; do pyramid-sort "$f" >/dev/null; done
+prettier --write . --log-level warn
+```
+
+Keep the prune list and `.prettierignore` in sync. If a format-on-write editor
+hook is configured, give it the same exclusions.
+
+## Extending a generated component — the pseudo component
+
+A generated component that needs different behaviour or styling is never
+edited in place. Wrap it in a **pseudo component** at
+`src/components/<name>.tsx` that extends the generated original.
+
+It must be a **drop-in replacement**: same exported name, same props, same
+`ref` behaviour, so switching a call site is a one-line import change and
+nothing else has to move.
+
+```tsx
+import { cn } from '#/lib/utils.ts'
+import type { ComponentProps } from 'react'
+import { Button as ButtonPrimitive } from '#/components/ui/button.tsx'
+
+type ButtonProps = ComponentProps<typeof ButtonPrimitive> & { pill?: boolean }
+
+export const Button = ({ pill, className, ...props }: ButtonProps) => (
+  <ButtonPrimitive className={cn(pill && 'rounded-full', className)} {...props} />
+)
+```
+
+Call sites import `#/components/<name>.tsx`; the generated original keeps its
+own name at `#/components/ui/<name>.tsx`.
+
 ## Folder structure
 
 ```
@@ -78,16 +135,27 @@ goes in `integrations/<library>/`.
 
 Always use lowercase kebab-case.
 
-## Component naming
+## Naming — never prefix with the feature
 
-Components are PascalCase, named for what they are and nothing more. A
-component in `container/landing/about.tsx` is `About`, not `LandingAbout` —
-the folder already carries the feature, so repeating it in every symbol is
-noise.
+Components, files, and functions are named for what they are and nothing more.
+The folder already carries the feature or module, so repeating it in the symbol
+is noise.
 
-Prefix only where the distinction is required: the bare name collides with
-another import in the same file, or it is too generic to carry meaning on its
-own — `RouterComponent`, not `Component`.
+```
+container/landing/about.tsx     → About
+container/router/shell.tsx      → Shell
+container/router/not-found.tsx  → NotFound
+container/router/component.tsx  → Component
+```
+
+Not `LandingAbout`, `RouterShell`, `RouterNotFound`, or `RouterComponent`.
+Components stay PascalCase, files stay kebab-case.
+
+The **only** reason to prefix is a real name conflict with another file,
+component, or function. Not a hypothetical one, and not because the bare name
+reads thin on its own — `Component` is a fine export from
+`container/router/component.tsx`. Add the prefix when the collision actually
+happens, and only to the symbol that has to move.
 
 ## Exports
 
@@ -128,7 +196,7 @@ Use the package's subpath alias rather than deep relative paths. Declare it in
 "imports": { "#/*": "./src/*" }
 ```
 
-Then `import { RouterShell } from '#/container/router/shell'`.
+Then `import { Shell } from '#/container/router/shell'`.
 
 ## Formatting is done by tools, never by hand
 
@@ -147,7 +215,7 @@ bun add -d prettier pyramid-sort
 ```
 
 ```json
-"format": "prettier --write . && pyramid-sort . --sort-all && prettier --write ."
+"format": "sh scripts/format.sh"
 ```
 
 Prettier settings — no semicolons, single quotes, trailing commas, 80 columns:
@@ -191,4 +259,5 @@ import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 Side-effect imports (`import './styles.css'`) keep their position —
 reordering them changes module evaluation order.
 
-Add generated files (e.g. `routeTree.gen.ts`) to `.prettierignore`.
+Generated files are excluded from both tools — see **Generated code is never
+edited and never formatted**.
