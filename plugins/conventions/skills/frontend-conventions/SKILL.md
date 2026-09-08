@@ -20,7 +20,20 @@ When asked to initialize a frontend project, default to:
 - **Tailwind CSS 4**
 - **coss ui**
 
-Always use **Bun**.
+## Package manager
+
+Always **Bun** — never npm, yarn, or pnpm. That covers every form:
+
+| Instead of | Use |
+| --- | --- |
+| `npm install` | `bun install` |
+| `npm i <pkg>` | `bun add <pkg>` |
+| `npm run <script>` | `bun run <script>` |
+| `npx <cmd>` | `bunx <cmd>` |
+
+Docs for a library will almost always show the npm form. Translate it rather
+than pasting it — a stray `npx` writes a `package-lock.json` and splits the
+lockfile.
 
 ## UI library
 
@@ -33,7 +46,7 @@ the project, so the agent works from the real component APIs instead of
 guessing at them:
 
 ```bash
-npx skills add cosscom/coss
+bunx skills add cosscom/coss
 ```
 
 That skill carries the imports and composition rules for every primitive, the
