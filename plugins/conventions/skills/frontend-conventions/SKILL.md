@@ -2,7 +2,8 @@
 name: frontend-conventions
 description: >-
   Frontend conventions for JavaScript and TypeScript projects: default stack
-  when initializing a project, folder structure, file naming, import ordering
+  when initializing a project, which UI component library to reach for,
+  folder structure, file naming, import ordering
   (pyramid sort), formatting toolchain, component naming, exports, and
   internal import aliases. Read before writing or scaffolding frontend code.
 ---
@@ -17,8 +18,28 @@ When asked to initialize a frontend project, default to:
 - **TanStack Router**
 - **TanStack Query** (integrated)
 - **Tailwind CSS 4**
+- **coss ui**
 
 Always use **Bun**.
+
+## UI library
+
+Default to **coss ui** whenever a React project needs a component library.
+Reach for shadcn, Material UI, Chakra, or a hand-rolled set only when the user
+asks for one by name.
+
+Installing the components is half the job — also install the coss skills into
+the project, so the agent works from the real component APIs instead of
+guessing at them:
+
+```bash
+npx skills add cosscom/coss
+```
+
+That skill carries the imports and composition rules for every primitive, the
+Tailwind 4 token and `data-slot` conventions, and the shadcn/Radix → coss
+migration rules (`asChild` → `render`, `onSelect` → `onClick`, Select
+items-first, ToggleGroup `type` → `multiple`, Slider scalar values).
 
 ## Folder structure
 
