@@ -22,6 +22,12 @@
       "source": "./plugins/drizzle",
       "description": "Current official guidance for setting up and using Drizzle ORM.",
       "version": "0.1.0"
+    },
+    {
+      "name": "better-auth",
+      "source": "./plugins/better-auth",
+      "description": "Better Auth's official skills adapted for Bun, with version-aware documentation guidance.",
+      "version": "0.1.0"
     }
   ]
 }

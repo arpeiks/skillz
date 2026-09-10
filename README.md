@@ -23,6 +23,20 @@ plugins so every project picks them up without per-project setup.
 |---|---|
 | `drizzle` | Current official setup and API guidance for Drizzle ORM and Drizzle Kit |
 
+## better-auth
+
+| Skill | Covers |
+|---|---|
+| `better-auth-best-practices` | Server and client configuration, adapters, sessions, plugins, and environment variables |
+| `create-auth` | End-to-end Better Auth setup for new and existing applications |
+| `email-and-password-best-practices` | Email verification, password reset, policies, and hashing |
+| `organization-best-practices` | Organizations, teams, invitations, roles, and permissions |
+| `two-factor-authentication-best-practices` | TOTP, OTP, backup codes, trusted devices, and 2FA sign-in flows |
+
+The plugin adapts the [official Better Auth skills](https://github.com/better-auth/skills)
+for Bun and includes Better Auth's `llms.txt` index for choosing documentation
+that matches the installed release line.
+
 ## Install
 
 ```
@@ -30,6 +44,7 @@ plugins so every project picks them up without per-project setup.
 /plugin install conventions@skillz
 /plugin install security@skillz
 /plugin install drizzle@skillz
+/plugin install better-auth@skillz
 ```
 
 If the summary says `Run /reload-plugins to activate.`, run that. Skills are
