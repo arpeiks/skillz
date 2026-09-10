@@ -16,6 +16,12 @@
       "source": "./plugins/security",
       "description": "Audit a project against current published security guidance and advisories.",
       "version": "0.2.0"
+    },
+    {
+      "name": "drizzle",
+      "source": "./plugins/drizzle",
+      "description": "Current official guidance for setting up and using Drizzle ORM.",
+      "version": "0.1.0"
     }
   ]
 }

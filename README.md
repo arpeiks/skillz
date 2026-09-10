@@ -17,12 +17,19 @@ plugins so every project picks them up without per-project setup.
 |---|---|
 | `security-audit` | Advisories for the stack, current OWASP and browser guidance, and a review of the implementation against both |
 
+## drizzle
+
+| Skill | Covers |
+|---|---|
+| `drizzle` | Current official setup and API guidance for Drizzle ORM and Drizzle Kit |
+
 ## Install
 
 ```
 /plugin marketplace add arpeiks/skillz
 /plugin install conventions@skillz
 /plugin install security@skillz
+/plugin install drizzle@skillz
 ```
 
 If the summary says `Run /reload-plugins to activate.`, run that. Skills are
