@@ -111,6 +111,30 @@ export const Button = ({ pill, className, ...props }: ButtonProps) => (
 Call sites import `#/components/<name>.tsx`; the generated original keeps its
 own name at `#/components/ui/<name>.tsx`.
 
+## Links
+
+Use the framework's link component for navigation inside the app — TanStack
+Router's `Link`, Next's `Link`. A bare `<a>` loses client-side navigation,
+prefetching, and the active-state props the router gives you.
+
+Use `<a>` only when the destination leaves the app:
+
+```tsx
+<Link to="/pricing">Pricing</Link>
+<a href="https://github.com/arpeiks" rel="noreferrer" target="_blank">
+  GitHub
+</a>
+```
+
+## Shadows
+
+Never add a shadow unless it was explicitly asked for — no `shadow-*` utility,
+no custom `box-shadow`. Separate surfaces with a border or a background step
+instead. Depth is a deliberate design decision, not a default.
+
+Shadows already baked into a generated component are that component's own
+business; leave them alone. This rule covers shadows you add.
+
 ## Folder structure
 
 ```

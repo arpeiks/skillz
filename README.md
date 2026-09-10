@@ -1,19 +1,28 @@
 # skillz
 
-Shared engineering conventions, distributed as a Claude Code plugin so every
-project picks them up without per-project setup.
+Shared engineering conventions and workflows, distributed as Claude Code
+plugins so every project picks them up without per-project setup.
+
+## conventions
 
 | Skill | Covers |
 |---|---|
-| `general-conventions` | Git commit discipline — staging, messages, history |
+| `general-conventions` | Environment configuration and git commit discipline |
 | `frontend-conventions` | Stack defaults, folder structure, naming, formatting, import order |
 | `refine-conventions` | How to add or amend a convention here |
+
+## security
+
+| Skill | Covers |
+|---|---|
+| `security-audit` | Advisories for the stack, current OWASP and browser guidance, and a review of the implementation against both |
 
 ## Install
 
 ```
 /plugin marketplace add arpeiks/skillz
 /plugin install conventions@skillz
+/plugin install security@skillz
 ```
 
 If the summary says `Run /reload-plugins to activate.`, run that. Skills are
@@ -36,9 +45,12 @@ Before writing, generating, or refactoring code, read the
 They override framework scaffolding defaults.
 ```
 
-## Changing a convention
+`security-audit` is left on its description — it runs on request, not on every
+task.
+
+## Changing a skill
 
 Edit this repo, not the installed copy under `~/.claude/plugins/` — that is a
 cache and is overwritten on update. Bump the version in
-`.claude-plugin/marketplace.json` and `plugins/conventions/.claude-plugin/plugin.json`,
-then push.
+`.claude-plugin/marketplace.json` and the plugin's own
+`plugins/<plugin>/.claude-plugin/plugin.json`, then push.

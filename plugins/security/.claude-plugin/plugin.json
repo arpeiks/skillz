@@ -1,0 +1,11 @@
+{
+  "name": "security",
+  "description": "Audit a project against current published security guidance and advisories.",
+  "version": "0.2.0",
+  "author": {
+    "name": "arpeiks",
+    "url": "https://github.com/arpeiks"
+  },
+  "repository": "https://github.com/arpeiks/skillz",
+  "keywords": ["security", "audit", "advisories", "owasp"]
+}
