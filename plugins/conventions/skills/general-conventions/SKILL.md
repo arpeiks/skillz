@@ -2,11 +2,52 @@
 name: general-conventions
 description: >-
   General engineering conventions shared by frontend and backend projects,
-  covering validated environment configuration and git commit discipline.
-  Read when configuring environment variables or changing git history.
+  covering safe results for fallible functions, validated environment
+  configuration, and git commit discipline. Read when handling throwing
+  operations, configuring environment variables, or changing git history.
 ---
 
 # General conventions
+
+## Fallible functions
+
+- Define these helpers once in a shared `result.ts`.
+- Use `safe` for synchronous functions that can throw, such as `JSON.parse`.
+- Use `safeAsync` for asynchronous functions that can reject.
+- Handle the returned result by checking `ok`. Do not write `try/catch` at call
+  sites; only the shared helpers catch errors.
+
+```ts
+export type Result<T> =
+  | { ok: true; data: T; error: null }
+  | { ok: false; data: null; error: Error };
+
+const toError = (error: unknown) =>
+  error instanceof Error ? error : new Error(String(error));
+
+export const safe = <T>(run: () => T): Result<T> => {
+  try {
+    return { ok: true, data: run(), error: null };
+  } catch (error) {
+    return { ok: false, data: null, error: toError(error) };
+  }
+};
+
+export const safeAsync = async <T>(
+  run: () => Promise<T>,
+): Promise<Result<T>> => {
+  try {
+    return { ok: true, data: await run(), error: null };
+  } catch (error) {
+    return { ok: false, data: null, error: toError(error) };
+  }
+};
+```
+
+```ts
+const parsed = safe(() => JSON.parse(value));
+const response = await safeAsync(() => fetch(url));
+```
 
 ## Environment variables
 
