@@ -1,7 +1,7 @@
 {
   "name": "drizzle",
   "description": "Current official guidance for setting up and using Drizzle ORM.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": {
     "name": "arpeiks",
     "url": "https://github.com/arpeiks"

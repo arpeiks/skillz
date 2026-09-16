@@ -9,7 +9,7 @@
       "name": "conventions",
       "source": "./plugins/conventions",
       "description": "Engineering conventions: commit discipline, frontend stack and structure, formatting and import ordering.",
-      "version": "0.11.0"
+      "version": "0.12.0"
     },
     {
       "name": "security",
@@ -21,7 +21,7 @@
       "name": "drizzle",
       "source": "./plugins/drizzle",
       "description": "Current official guidance for setting up and using Drizzle ORM.",
-      "version": "0.1.0"
+      "version": "0.2.0"
     },
     {
       "name": "better-auth",

@@ -27,3 +27,16 @@ the setup, ask before selecting one.
 Preserve the project's package-manager, environment-validation, file-layout,
 and generated-code conventions. Do not apply migrations to a shared or
 production database unless the user explicitly asks for that external change.
+
+## Queries
+
+When querying with Drizzle ORM, always prefer the **relational query API**
+(`db.query.<table-name>.findFirst` / `findMany`) over the legacy SQL-like query
+builder syntax (`db.select().from(...)` with manual joins).
+
+- Initialize the client with the schema: `drizzle(client, { schema })`.
+- Define table relations in schema files using `relations()` from `drizzle-orm`
+  to enable nested queries (`with: { ... }`).
+- Reserve `db.select()` only for queries that relational queries cannot express
+  (such as complex aggregations, group-by projections, or unions).
+
